@@ -1,0 +1,9 @@
+AM_CPPFLAGS = -I $(top_srcdir)/include $(EXTRA_CPPFLAGS)
+AM_CFLAGS = -I $(top_srcdir)/include $(EXTRA_CFLAGS)
+AM_CXXFLAGS = $(EXTRA_CXXFLAGS)
+
+CFLAGS += $(OPTIMISE)
+CXXFLAGS += $(OPTIMISE)
+
+GNU_VERBOSITY := $(if $(findstring GNU,$(shell $(MAKE) -v)),0,1)
+V ?= $(GNU_VERBOSITY)
