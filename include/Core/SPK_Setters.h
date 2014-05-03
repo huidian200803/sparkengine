@@ -267,7 +267,7 @@ namespace SPK
 	* @tparam obj Class in which the setter is declared
 	* @tparam func The setter itself
 	*/
-	template<typename T, class obj, typename Setter<T,obj>::extra<unsigned int>::type func>
+	template<typename T, class obj, typename Setter<T,obj>::template extra<unsigned int>::type func>
 	class IndexedSetterDelegate : public BoundSetter<T>
 	{
 	public:
@@ -285,7 +285,7 @@ namespace SPK
 		*/
 		void operator()(typename Arg<T>::type value) const
 		{
-			Setter<T,obj>::extra<unsigned int>::call<func>(const_cast<obj*>(object),index,value);
+			Setter<T,obj>::template extra<unsigned int>::call<func>(const_cast<obj*>(object),index,value);
 		}
 
 	private:

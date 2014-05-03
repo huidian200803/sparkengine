@@ -53,17 +53,19 @@ namespace SPK
 	template<typename T, class obj>
 	struct Getters : public GetterBase<T,obj>
 	{
+		typedef GetterBase<T,obj> gb;
+
 		/**
 		* @brief Stores getters address for later call
 		*/
-		template<type g1>
+		template<typename gb::type g1>
 		struct store
 		{
 			/**
 			* @brief Aggregate the values from all getters and return the result
 			* @see Other specializations of Getters
 			*/
-			static inline returnType call(const obj* o)
+			static inline typename gb::returnType call(const obj* o)
 			{
 				return (o->*g1)();
 			}
@@ -76,7 +78,7 @@ namespace SPK
 		struct extra
 		{
 			/** @brief Convenient typedef */
-			typedef typename extra_<P>::type gtype;
+			typedef typename gb::template extra_<P>::type gtype;
 
 			/**
 			* @brief Stores getters address for later call
@@ -88,7 +90,7 @@ namespace SPK
 				* @brief Aggregate the values from all getters and return the result
 				* @see Other specializations of Getters
 				*/
-				static inline returnType call(const obj* o, P v)
+				static inline typename gb::returnType call(const obj* o, P v)
 				{
 					return (o->*g1)(v);
 				}
@@ -100,7 +102,9 @@ namespace SPK
 	template<typename T, class obj>
 	struct Getters<Pair<T>,obj> : public GetterBase<T,obj>
 	{
-		template<type g1, type g2>
+		typedef GetterBase<T,obj> gb;
+
+		template<typename gb::type g1, typename gb::type g2>
 		struct store
 		{
 			static inline Pair<T> call(const obj* o)
@@ -112,12 +116,12 @@ namespace SPK
 		template<typename P>
 		struct extra
 		{
-			typedef typename extra_<P>::type gtype;
+			typedef typename gb::template extra_<P>::type gtype;
 
 			template<gtype g1, gtype g2>
 			struct store
 			{
-				static inline returnType call(const obj* o, P v)
+				static inline typename gb::returnType call(const obj* o, P v)
 				{
 					return Pair<T>((o->*g1)(v),(o->*g2)(v));
 				}
@@ -129,7 +133,9 @@ namespace SPK
 	template<typename T, class obj>
 	struct Getters<Triplet<T>,obj> : public GetterBase<T,obj>
 	{
-		template<type g1, type g2, type g3>
+		typedef GetterBase<T,obj> gb;
+
+		template<typename gb::type g1, typename gb::type g2, typename gb::type g3>
 		struct store
 		{
 			static inline Triplet<T> call(const obj* o)
@@ -141,12 +147,12 @@ namespace SPK
 		template<typename P>
 		struct extra
 		{
-			typedef typename extra_<P>::type gtype;
+			typedef typename gb::template extra_<P>::type gtype;
 
 			template<gtype g1, gtype g2, gtype g3>
 			struct store
 			{
-				static inline returnType call(const obj* o, P v)
+				static inline typename gb::returnType call(const obj* o, P v)
 				{
 					return Triplet<T>((o->*g1)(v),(o->*g2)(v),(o->*g3)(v));
 				}
@@ -158,7 +164,9 @@ namespace SPK
 	template<typename T, class obj>
 	struct Getters<Quadruplet<T>,obj> : public GetterBase<T,obj>
 	{
-		template<type g1, type g2, type g3, type g4>
+		typedef GetterBase<T,obj> gb;
+
+		template<typename gb::type g1, typename gb::type g2, typename gb::type g3, typename gb::type g4>
 		struct store
 		{
 			static inline Quadruplet<T> call(const obj* o)
@@ -170,12 +178,12 @@ namespace SPK
 		template<typename P>
 		struct extra
 		{
-			typedef typename extra_<P>::type gtype;
+			typedef typename gb::template extra_<P>::type gtype;
 
 			template<gtype g1, gtype g2, gtype g3, gtype g4>
 			struct store
 			{
-				static inline returnType call(const obj* o, P v)
+				static inline typename gb::returnType call(const obj* o, P v)
 				{
 					return Quadruplet<T>((o->*g1)(v),(o->*g2)(v),(o->*g3)(v),(o->*g4)(v));
 				}
