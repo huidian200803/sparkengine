@@ -252,7 +252,6 @@ namespace SPK
 
 		class Stream
 		{
-		friend Stream Logger::getStream(LogPriority,bool);
 
 		public :
 
