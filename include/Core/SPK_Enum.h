@@ -23,6 +23,7 @@
 #define H_SPK_ENUM
 
 #include "Core/SPK_Logger.h"
+#include <sstream>
 
 // macros for enum declarations
 // This allows to get a string representation of an enum value
@@ -90,15 +91,15 @@ namespace SPK
 	{
 		size_t pos = 0;
 		size_t flag = 0;
-		while (pos < enums.length)
+		while (pos < enums.length())
 		{
 			size_t startPos = pos;
 			pos = enums.find_first_of(" |",startPos);
-			if (pos == std::npos)
-				pos = enums.length;
+			if (pos == std::string::npos)
+				pos = enums.length();
 			if (pos > startPos) 
 			{
-				T value = getEnumValue(enums.substr(startPos,pos - startPos)); // to call the right function
+				T value = getEnumValue<T>(enums.substr(startPos,pos - startPos)); // to call the right function
 				flag |= value;
 			}				
 			++pos;
@@ -115,7 +116,7 @@ namespace SPK
 	template<typename T>
 	std::string getORedEnumString(int flag) /// TODO Needs testing...
 	{
-		std::stringbuf buf;
+		std::string buf;
 		bool hasOneORedEnum = false;
 		for (size_t i = 1; i < 32; ++i)
 			if ((flag & (1 << i)) != 0)
@@ -124,14 +125,14 @@ namespace SPK
 				if (!name.empty())
 				{
 					if (hasOneORedEnum)
-						buf << '|';
-					buf << name
-					hasOneORedEnum = true
+						buf += "|";
+					buf += name;
+					hasOneORedEnum = true;
 				}
 			}
 		if (!hasOneORedEnum)
-			buf << getName(static_cast<T>(0));
-		return buf.str();	
+			buf += getName(static_cast<T>(0));
+		return buf;	
 	}
 }
 
