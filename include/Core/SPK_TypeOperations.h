@@ -199,15 +199,15 @@ namespace SPK
 			if(type.base == item::spkType)
 			{
 				if(type.specifier == TS_SINGLE)
-					templatedFunctor.call<baseType>();
+					templatedFunctor.template call<baseType>();
 				else if(type.specifier == TS_PAIR)
-					templatedFunctor.call<Pair<baseType> >();
+					templatedFunctor.template call<Pair<baseType> >();
 				else if(type.specifier == TS_TRIPLET)
-					templatedFunctor.call<Triplet<baseType> >();
+					templatedFunctor.template call<Triplet<baseType> >();
 				else if(type.specifier == TS_QUADRUPLET)
-					templatedFunctor.call<Quadruplet<baseType> >();
+					templatedFunctor.template call<Quadruplet<baseType> >();
 				else if(type.specifier == TS_ARRAY)
-					templatedFunctor.call<std::vector<baseType> >();
+					templatedFunctor.template call<std::vector<baseType> >();
 			}
 			else
 			{
