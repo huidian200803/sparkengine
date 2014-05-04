@@ -24,6 +24,8 @@
 #ifndef H_SPK_ATTRIBUTES
 #define H_SPK_ATTRIBUTES
 
+#include "SPK_Traits.h"
+
 namespace SPK
 {
 	/**
@@ -73,6 +75,8 @@ namespace SPK
 		typename name, void* (*attrObj)(obj*)>
 	struct Attribute : public AttributeBase<T,obj,false,false,name>, public AttributeConnection<T, obj, Attribute<T, obj, func, getters, name, attrObj> >
 	{
+		using AttributeBase<T,obj,false,false,name>::asName;
+
 	private:
 		typedef AttributeConnection<T, obj, Attribute<T, obj, func, getters, name, attrObj> > ConnectionType;
 
@@ -122,6 +126,8 @@ namespace SPK
 		typename name, void* (*attrObj)(obj*)>
 	struct ArrayAttribute : public AttributeBase<std::vector<T>,obj,true,false,name>, public AttributeConnection<std::vector<T>, obj, ArrayAttribute<T, obj, _add, _remove, _clear, _getAt, _getSize, name, attrObj> >
 	{
+		using AttributeBase<std::vector<T>,obj,true,false,name>::asName;
+
 	private:
 		typedef AttributeConnection<std::vector<T>, obj, ArrayAttribute<T, obj, _add, _remove, _clear, _getAt, _getSize, name, attrObj> > ConnectionType;
 
@@ -171,10 +177,12 @@ namespace SPK
 	/**
 	*
 	*/
-	template<typename T, class obj, typename Setter<T,obj>::extra<unsigned int>::type func, typename getters, typename name, typename structName,
+	template<typename T, class obj, typename Setter<T,obj>::template extra<unsigned int>::type func, typename getters, typename name, typename structName,
 		void* (*fieldObj)(obj*)>
 	struct FieldAttribute : public AttributeBase<T,obj,false,false,name>, protected FieldConnectionHead<T,obj,FieldAttribute<T,obj,func,getters,name,structName,fieldObj> >
 	{
+		using AttributeBase<T,obj,false,false,name>::asName;
+
 		typedef FieldConnectionHead<T,obj,FieldAttribute<T,obj,func,getters,name,structName,fieldObj> > ConnectionType;
 
 		// Static
@@ -185,7 +193,7 @@ namespace SPK
 
 		static inline void set(obj* object, unsigned int id, typename Arg<T>::type value)
 		{
-			Setter<T,obj>::extra<unsigned int>::call<func>(object,id,value);
+			Setter<T,obj>::template extra<unsigned int>::call<func>(object,id,value);
 		}
 
 		static inline T get(obj* object, unsigned int id)
@@ -278,6 +286,8 @@ namespace SPK
 		unsigned int instantiationId>
 	class StructuredAttributeBase : public AttributeBase<void,obj,false,true,sName>
 	{
+		using AttributeBase<void,obj,false,false,sName>::asName;
+
 	protected:
 		typedef sName attrName;
 		struct instantiation
@@ -311,12 +321,12 @@ namespace SPK
 
 		static const char* getFieldName(unsigned int i)
 		{
-			return query<>::field::select<item_name>(i);
+			return query<>::field::template select<item_name>(i);
 		}
 
 		static ValueType getFieldType(unsigned int i)
 		{
-			return query<>::field::select<item_type>(i);
+			return query<>::field::template select<item_type>(i);
 		}
 
 		static void serialize(IO::Serializer& s, obj* o)
@@ -329,7 +339,7 @@ namespace SPK
 			}
 			else
 				for(unsigned int t = 0; t < size; t++)
-					query<>::field::process<serialize_field, IO::Serializer&>(s, o, IO::StructuredAttributeContext(size,t,getFieldNb()));
+					query<>::field::template process<serialize_field, IO::Serializer&>(s, o, IO::StructuredAttributeContext(size,t,getFieldNb()));
 		}
 
 		static void deserialize(IO::Deserializer& d, obj* o)
@@ -342,17 +352,17 @@ namespace SPK
 
 			// Deserialize it
 			for(unsigned int t = 0; t < size; t++)
-				query<>::field::process<deserialize_field, IO::Deserializer&>(d, o, IO::StructuredAttributeContext(size,t,getFieldNb()));
+				query<>::field::template process<deserialize_field, IO::Deserializer&>(d, o, IO::StructuredAttributeContext(size,t,getFieldNb()));
 		}
 
 		static void elementRemoved(obj* object, unsigned int id)
 		{
-			query<>::field::process<field_element_removed>(object, id);
+			query<>::field::template process<field_element_removed>(object, id);
 		}
 
 		static void elementsCleared(obj* object)
 		{
-			query<>::field::process<field_elements_cleared>(object);
+			query<>::field::template process<field_elements_cleared>(object);
 		}
 
 	private:
@@ -364,14 +374,14 @@ namespace SPK
 				return CONNECTION_STATUS_INVALID_ID;
 
 			ConnectionStatus status = CONNECTION_STATUS_INVALID_FIELD;
-			query<>::field::process<connect_field, const ConnectionParameters&, ConnectionStatus&>(cp, status);
+			query<>::field::template process<connect_field, const ConnectionParameters&, ConnectionStatus&>(cp, status);
 
 			return status;
 		}
 
 		static inline void disconnect(const ConnectionParameters& cp)
 		{
-			query<>::field::process<disconnect_field, const ConnectionParameters&>(cp);
+			query<>::field::template process<disconnect_field, const ConnectionParameters&>(cp);
 		}
 	};
 }
