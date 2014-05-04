@@ -229,12 +229,12 @@ namespace SPK
 		}
 		void remove()
 		{
-			removeConnection();
+			controlledObject->removeConnection();
 			controlledObject = 0;
 		}
 		bool insertAfter(ConnectionItem* item)
 		{
-			return insertAfterConnection(item);
+			return controlledObject->insertAfterConnection(item);
 		}
 		void set(typename Arg<T>::type value)
 		{
@@ -286,8 +286,8 @@ namespace SPK
 		}
 
 	protected:
-		template<typename T, typename O, typename F> friend class FieldConnectionHead;
-		template<typename T, typename O, typename F> friend class FieldConnectionItem;
+		template<typename TT, typename O, typename F> friend class FieldConnectionHead;
+		template<typename TT, typename O, typename F> friend class FieldConnectionItem;
 		FieldConnection<T>* previousField;
 		FieldConnection<T>* nextField;
 	};
@@ -300,7 +300,12 @@ namespace SPK
 	template<typename T, typename O, typename F>
 	class FieldConnectionItem : public FieldConnection<T>
 	{
+		using FieldConnection<T>::previousField;
+		using FieldConnection<T>::nextField;
+		using FieldConnection<T>::removeField;
+
 	public:
+
 		FieldConnectionItem(O* obj = 0, unsigned int i = 0) :
 			controlledObject(obj),
 			id(i)
@@ -308,8 +313,8 @@ namespace SPK
 		}
 		~FieldConnectionItem()
 		{
-			removeConnection();
-			removeField();
+			controlledObject->removeConnection();
+			controlledObject->removeField();
 		}
 		Ref<SPKObject> getReceiver() const
 		{
@@ -333,9 +338,9 @@ namespace SPK
 		}
 		bool insertAfter(ConnectionItem* item)
 		{
-			return insertAfterConnection(item);
+			return controlledObject->insertAfterConnection(item);
 		}
-		bool insertAfterField(FieldConnection* field)
+		bool insertAfterField(FieldConnectionItem* field)
 		{
 			if(!field) return false;
 
@@ -351,7 +356,7 @@ namespace SPK
 				F::set(controlledObject, id, value);
 		}
 
-		void moveAfter(FieldConnection* field, unsigned int newId)
+		void moveAfter(FieldConnectionItem* field, unsigned int newId)
 		{
 			id = newId;
 
@@ -374,6 +379,8 @@ namespace SPK
 	template<typename T, typename O, typename F>
 	class FieldConnectionHead : public FieldConnection<T>
 	{
+		using FieldConnection<T>::nextField;
+
 	public:
 		typedef FieldConnectionItem<T, O, F> ItemType;
 
@@ -390,14 +397,14 @@ namespace SPK
 		{
 			return false;
 		}
-		bool insertAfterField(FieldConnection*)
+		bool insertAfterField(FieldConnection<T>*)
 		{
 			return false;
 		}
 		void set(typename Arg<T>::type)
 		{
 		}
-		void moveAfter(FieldConnection*, unsigned int)
+		void moveAfter(FieldConnection<T>*, unsigned int)
 		{
 		}
 
@@ -439,7 +446,7 @@ namespace SPK
 
 		ItemType* getLastElement()
 		{
-			FieldConnection* field = this;
+			FieldConnection<T>* field = this;
 			while(field->nextField)
 				field = field->nextField;
 			return (ItemType*)(field == this ? 0 : field);
@@ -459,7 +466,7 @@ namespace SPK
 			// Create the connection
 			ItemType* newField = SPK_NEW(ItemType, (O*)cp.receiver.get(), cp.id);
 			newField->insertAfter(cp.controlPtr);
-			newField->insertAfterField(beforeId ? (FieldConnection*)beforeId : (FieldConnection*)this);
+			newField->insertAfterField(beforeId ? (FieldConnection<T>*)beforeId : (FieldConnection<T>*)this);
 			return CONNECTION_STATUS_OK;
 		}
 
