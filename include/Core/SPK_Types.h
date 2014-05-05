@@ -59,6 +59,7 @@ namespace SPK
 		TYPE_INT,						/**< @brief 32 bit signed integer value type */
 		TYPE_UINT,						/**< @brief 32 bit unsigned integer value type */
 		TYPE_FLOAT,						/**< @brief C++ 'float' type */
+		TYPE_SIZE_T,					/**< @brief C++ 'size_t' type */
 		TYPE_VECTOR,					/**< @brief Correspond to SPK::Vector3D */
 		TYPE_COLOR,						/**< @brief Correspond to SPK::Color */
 		TYPE_STRING,					/**< @brief Correspond to std::string */
@@ -305,6 +306,7 @@ namespace SPK
 			spk_basetype( int,						TYPE_INT,						meta::PassByValue );
 			spk_basetype( unsigned int,				TYPE_UINT,						meta::PassByValue );
 			spk_basetype( float,					TYPE_FLOAT,						meta::PassByValue );
+			spk_basetype( size_t,					TYPE_SIZE_T,					meta::PassByValue );
 			spk_basetype( Vector3D,					TYPE_VECTOR,					meta::PassByRef );
 			spk_basetype( Color,					TYPE_COLOR,						meta::PassByRef );
 			spk_basetype( std::string,				TYPE_STRING,					meta::PassByRef );
