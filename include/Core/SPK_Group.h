@@ -370,7 +370,7 @@ namespace SPK
 	public :
 		spark_description(Group, Transformable)
 		(
-			spk_attribute(unsigned int, capacity, reallocate, getCapacity);
+			spk_attribute(size_t, capacity, reallocate, getCapacity);
 			spk_attribute(Pair<float>, lifeTime, setLifeTime, getMinLifeTime, getMaxLifeTime);
 			spk_attribute(bool, immortal, setImmortal, isImmortal);
 			spk_attribute(bool, still, setStill, isStill);
