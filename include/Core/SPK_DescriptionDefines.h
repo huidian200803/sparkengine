@@ -262,8 +262,8 @@ namespace meta
 		typedef SPK::Attribute<_type_,														\
 							   _spk_obj,													\
 							   &_spk_obj::_setter_,											\
-							   typename SPK::Getters<_type_,_spk_obj>						\
-								::template store<SPK_UNPACK_GETTERS_(_spk_obj,__VA_ARGS__)>,\
+							   SPK::Getters<_type_,_spk_obj>								\
+								::store<SPK_UNPACK_GETTERS_(_spk_obj,__VA_ARGS__)>,			\
 							   name ## _name_,												\
 							   &description_base::_spk_get_attr_ ## _name_> _name_;			\
 	private:																				\
