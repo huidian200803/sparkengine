@@ -22,6 +22,8 @@
 #ifndef H_SPK_OBJECT
 #define H_SPK_OBJECT
 
+#include "SPK_ClassDescription.h"
+#include "SPK_StaticDescription.h"
 #include <string>
 #include <map>
 
