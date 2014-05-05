@@ -24,6 +24,8 @@
 #ifndef H_SPK_CONTROLS
 #define H_SPK_CONTROLS
 
+#include "SPK_Object.h"
+
 namespace SPK
 {
 	/**
@@ -37,6 +39,8 @@ namespace SPK
 	template<typename T>
 	class ValueControl : public ControlConnection<T>
 	{
+		using ConnectionItem::nextConnection;
+
 	public:
 		/**
 		* @brief Constructor (value is default-initialized)
